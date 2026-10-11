@@ -1,0 +1,14 @@
+{
+    "name": "fit-app-with-no-name",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "compile:sass": "gulp sass",
+        "watch:sass": "gulp"
+    },
+    "devDependencies": {
+        "gulp": "^5.0.0",
+        "gulp-sass": "^6.0.0",
+        "sass": "^1.83.0"
+    }
+}
