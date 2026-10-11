@@ -1,0 +1,23 @@
+DirectoryIndex index.php
+
+# Stop Apache from guessing files (e.g. "/index" → index.php) behind the router's back
+<IfModule mod_negotiation.c>
+    Options -MultiViews
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    Options +SymLinksIfOwnerMatch
+    RewriteEngine On
+
+    # Detect the base path, so the app works in a subfolder (XAMPP) and at a domain root
+    RewriteCond %{REQUEST_URI}::$0 ^(/.+)/(.*)::\2$
+    RewriteRule .* - [E=BASE:%1]
+
+    # Redirect /index.php/... to the clean URL, so each page has one address
+    RewriteCond %{ENV:REDIRECT_STATUS} =""
+    RewriteRule ^index\.php(?:/(.*)|$) %{ENV:BASE}/$1 [R=308,L]
+
+    # Serve existing files directly, send everything else to Symfony
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ %{ENV:BASE}/index.php [L]
+</IfModule>
