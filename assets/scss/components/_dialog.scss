@@ -1,0 +1,97 @@
+@use '../abstracts' as *;
+
+$spring: cubic-bezier(.32, .72, 0, 1);
+$dialog-hidden: translateY(1.5rem) scale(.94);
+
+.dialog {
+    width: min(100% - #{$space-6}, 26rem);
+    padding: 0;
+    border: 1px solid var(--separator);
+    border-radius: $radius;
+    background: color-mix(in srgb, var(--surface) 78%, transparent);
+    -webkit-backdrop-filter: saturate(180%) blur(24px);
+    backdrop-filter: saturate(180%) blur(24px);
+    box-shadow: 0 24px 64px rgba(0, 0, 0, .25);
+    color: var(--text);
+    opacity: 0;
+    transform: $dialog-hidden;
+    transition:
+        opacity .25s ease,
+        transform .45s $spring,
+        overlay .45s allow-discrete,
+        display .45s allow-discrete;
+
+    &[open] {
+        opacity: 1;
+        transform: none;
+
+        @starting-style {
+            opacity: 0;
+            transform: $dialog-hidden;
+        }
+    }
+
+    &::backdrop {
+        background: rgba(30, 20, 10, .28);
+        -webkit-backdrop-filter: blur(6px) saturate(120%);
+        backdrop-filter: blur(6px) saturate(120%);
+        opacity: 0;
+        transition:
+            opacity .35s ease,
+            overlay .35s allow-discrete,
+            display .35s allow-discrete;
+    }
+
+    &[open]::backdrop {
+        opacity: 1;
+
+        @starting-style {
+            opacity: 0;
+        }
+    }
+
+    .body {
+        padding: $space-5;
+    }
+
+    .head {
+        margin-bottom: $space-5;
+
+        h2 {
+            font-size: $text-lg;
+            font-weight: 700;
+            letter-spacing: -.02em;
+        }
+    }
+
+    .close {
+        display: grid;
+        place-items: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        background: var(--surface-2);
+        color: var(--muted);
+        cursor: pointer;
+
+        svg {
+            width: 1rem;
+            height: 1rem;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        transform: none;
+        transition-property: opacity, overlay, display;
+
+        &[open] {
+            @starting-style {
+                transform: none;
+            }
+        }
+    }
+}
+
+html:has(.dialog[open]) {
+    overflow: hidden;
+}

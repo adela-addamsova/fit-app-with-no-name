@@ -1,0 +1,7 @@
+{# Usage: <twig:Button icon="add" data-dialog-open="add-weight">Add</twig:Button> #}
+{% props icon = null %}
+
+<button {{ attributes.defaults({type: 'button', class: 'btn'}) }}>
+    {%- if icon %}<twig:ux:icon :name="icon" class="icon" />{% endif -%}
+    {% block content %}{% endblock %}
+</button>

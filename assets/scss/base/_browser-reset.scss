@@ -1,0 +1,112 @@
+p,
+body,
+h1,
+h2,
+h3,
+form,
+input,
+textarea,
+select,
+ul,
+ol,
+li {
+    margin: 0;
+    padding: 0;
+}
+
+img {
+    border: 0;
+}
+
+table {
+    border: 0;
+    border-collapse: collapse;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+textarea,
+input {
+    &:focus {
+        outline: none;
+    }
+}
+
+input {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+textarea {
+    resize: none;
+}
+
+input[type="number"] {
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+}
+
+button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    text-align: inherit;
+    cursor: default;
+}
+
+address,
+time,
+abbr,
+cite,
+dfn,
+mark,
+code,
+s,
+ins,
+del {
+    all: unset;
+    display: inline;
+}
+
+article,
+section,
+nav,
+aside,
+figure,
+main,
+header,
+footer,
+summary,
+details,
+blockquote {
+    all: unset;
+    display: block;
+    width: 100%;
+}
+
+figure {
+    margin: 0;
+    padding: 0;
+}
+
+abbr {
+    text-decoration: underline dotted;
+    cursor: help;
+}

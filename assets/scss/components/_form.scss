@@ -1,0 +1,69 @@
+@use '../abstracts' as *;
+
+.stack {
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+
+    > ul {
+        list-style: none;
+        font-size: $text-sm;
+        color: var(--danger);
+    }
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+
+    label,
+    .label {
+        font-size: $text-sm;
+        font-weight: 500;
+        color: var(--muted);
+    }
+
+    > .error,
+    > ul {
+        list-style: none;
+        font-size: $text-sm;
+        font-weight: 500;
+        color: var(--danger);
+    }
+
+    &.invalid .input,
+    &:has(> ul) .input {
+        border-color: var(--danger);
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 14%, transparent);
+    }
+}
+
+.input {
+    width: 100%;
+    height: 3rem;
+    padding: 0 $space-4;
+    background: var(--surface-2);
+    border: 1px solid transparent;
+    border-radius: $radius-sm;
+    color: var(--text);
+    font: inherit;
+    font-variant-numeric: tabular-nums;
+    transition: border-color .2s $ease, box-shadow .2s $ease;
+
+    &::placeholder {
+        color: var(--muted);
+        opacity: .6;
+    }
+
+    &:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+
+    &.large {
+        height: 3.5rem;
+        font-size: $text-lg;
+        font-weight: 600;
+    }
+}

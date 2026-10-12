@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>{% block title %}{% endblock %}{{ block('title') is not empty ? ' · ' }}{{ app_name }}</title>
+
+        <link rel="icon" type="image/svg+xml" href="{{ asset('images/favicon.svg') }}">
+
+        {# Handle sidebar width #}
+        <script>
+            try {
+                const sidebarWidth = localStorage.getItem("sidebar-width");
+                if (sidebarWidth) {
+                    document.documentElement.style.setProperty(
+                        "--sidebar-width",
+                        sidebarWidth,
+                    );
+                }
+
+                const theme = localStorage.getItem("theme");
+                if (theme === "light" || theme === "dark") {
+                    document.documentElement.dataset.theme = theme;
+                }
+            } catch (error) {}
+        </script>
+        
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        {% endblock %}
+
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body>
+        {% set current_route = app.request.attributes.get('_route') %}
+
+        {% set nav_items = [
+            {
+                label: 'Overview', 
+                route: 'app_dashboard', 
+                section: 'app_dashboard', 
+                icon: 'dashboard'
+            },
+            {
+                label: 'Weight', 
+                route: 'app_weight_index', 
+                section: 'app_weight_', 
+                icon: 'weight'
+            },
+            {
+                label: 'Workouts', 
+                route: null, 
+                icon: 'workouts'
+            },
+            {
+                label: 'Food', 
+                route: null, 
+                icon: 'food'
+            },
+            {
+                label: 'Settings', 
+                route: null, 
+                icon: 'settings'
+            },
+        ] %}
+
+        <div class="app">
+            <nav class="nav">
+                <a class="brand" href="{{ path('app_dashboard') }}">
+                    <img class="mark" src="{{ asset('images/favicon.svg') }}" alt="">
+                    <span>{{ app_name }}</span>
+                </a>
+
+                {% for item in nav_items %}
+                    {% set content %}
+                        <twig:ux:icon :name="item.icon" class="icon"/>
+                        <span>{{ item.label }}</span>
+                    {% endset %}
+
+                    {% if item.route %}
+                        <a class="link {{ current_route starts with item.section ? 'active' }}" href="{{ path(item.route) }}">{{ content }}</a>
+                    {% else %}
+                        <span class="link disabled" title="Coming soon">{{ content }}</span>
+                    {% endif %}
+                {% endfor %}
+
+                <div class="segmented theme-switch" role="group" aria-label="Theme">
+                    <button type="button" data-theme-set="light" title="Light" aria-label="Light theme">
+                        <twig:ux:icon name="theme-light"/>
+                    </button>
+                    <button type="button" data-theme-set="dark" title="Dark" aria-label="Dark theme">
+                        <twig:ux:icon name="theme-dark"/>
+                    </button>
+                </div>
+
+                <div class="resizer" data-sidebar-resizer aria-hidden="true"></div>
+            </nav>
+
+            <main class="main">
+                <div class="content">
+                    {% block body %}{% endblock %}
+                </div>
+            </main>
+        </div>
+    </body>
+</html>

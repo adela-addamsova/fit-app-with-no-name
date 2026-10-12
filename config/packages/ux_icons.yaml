@@ -29,7 +29,6 @@ ux_icons:
         next: 'lucide:chevron-right'
         trend-down: 'lucide:arrow-down'
         trend-up: 'lucide:arrow-up'
-        theme-system: 'lucide:monitor'
         theme-light: 'lucide:sun'
         theme-dark: 'lucide:moon'
 

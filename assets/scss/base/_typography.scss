@@ -1,0 +1,38 @@
+@use '../abstracts' as *;
+
+h1 {
+    font-size: $text-xl;
+    font-weight: 700;
+    letter-spacing: -.03em;
+    line-height: 1.15;
+}
+
+p {
+    font-size: $text-base;
+    line-height: 150%;
+}
+
+.small {
+    font-size: $text-sm;
+    line-height: 120%;
+}
+
+.bold {
+    font-weight: 800;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+sup {
+    vertical-align: text-top;
+    font-size: 0.5em;
+    line-height: 1.25em;
+}
+
+sub {
+    vertical-align: text-bottom;
+    font-size: 0.75em;
+    line-height: 1.25em;
+}
