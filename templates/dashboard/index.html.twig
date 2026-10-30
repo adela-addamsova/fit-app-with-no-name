@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Overview{% endblock %}
+
+{% block body %}
+    <header class="page-header flex justify-between" data-sticky-header>
+        <div>
+            <p class="date">{{ 'now'|date('l, j F') }}</p>
+            <h1>Overview</h1>
+        </div>
+    </header>
+
+    <div class="cards grid">
+        <a class="card summary" href="{{ path('app_weight_index') }}">
+            <div class="top flex justify-between">
+                <h2 class="title flex"><span class="icon-chip"><twig:ux:icon name="weight" /></span>Weight</h2>
+                <twig:ux:icon name="next" class="chevron" />
+            </div>
+            {% if latest_weight %}
+                <p class="value">{{ latest_weight.weight|number_format(1, '.', ' ') }}<span class="unit">kg</span></p>
+                <div class="meta flex">
+                    {% if previous_weight %}
+                        <twig:TrendPill :diff="latest_weight.weight - previous_weight.weight" />
+                    {% endif %}
+                    <span>{{ latest_weight.measured_at|date('j M') }}</span>
+                </div>
+            {% else %}
+                <p class="empty">No entries yet. Add your first weight.</p>
+            {% endif %}
+        </a>
+    </div>
+{% endblock %}
