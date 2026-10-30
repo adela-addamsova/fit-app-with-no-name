@@ -37,6 +37,17 @@
         border-color: var(--danger);
         box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 14%, transparent);
     }
+
+    &.reserve {
+        position: relative;
+        padding-bottom: 1.75rem;
+
+        > .error,
+        > ul {
+            position: absolute;
+            bottom: 0;
+        }
+    }
 }
 
 .input {

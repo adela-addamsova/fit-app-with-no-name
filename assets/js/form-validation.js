@@ -3,7 +3,7 @@
  *
  * - data-field marks each field wrapper (label + input + errors)
  * - data-error-required / data-error-pattern on an input override the default messages
- * - data-decimal on an input turns a typed decimal comma into a dot
+ * - data-decimal on an input turns a typed decimal comma into a dot and removes anything but digits and dots
  */
 
 /**
@@ -31,18 +31,32 @@ const errorMessage = (input) => {
 const clearError = (field) => {
     field.classList.remove('invalid');
     field.querySelectorAll(':scope > .error, :scope > ul').forEach((element) => element.remove());
+
+    const input = field.querySelector('[aria-invalid]');
+    if (input) {
+        input.removeAttribute('aria-invalid');
+        input.removeAttribute('aria-describedby');
+    }
 };
 
 /**
+ * Shows the message under the field and links it to the input for screen readers.
+ *
  * @param {HTMLElement} field
+ * @param {HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement} input
  * @param {string} message
  */
-const showError = (field, message) => {
+const showError = (field, input, message) => {
     const error = document.createElement('p');
+    error.id = `${input.id}-error`;
     error.className = 'error';
+    error.setAttribute('role', 'alert');
     error.textContent = message;
     field.append(error);
     field.classList.add('invalid');
+
+    input.setAttribute('aria-invalid', 'true');
+    input.setAttribute('aria-describedby', error.id);
 };
 
 document.addEventListener('submit', (event) => {
@@ -60,7 +74,7 @@ document.addEventListener('submit', (event) => {
 
         clearError(field);
         if (!input.checkValidity()) {
-            showError(field, errorMessage(input));
+            showError(field, input, errorMessage(input));
             firstInvalid ??= input;
         }
     });
@@ -72,15 +86,19 @@ document.addEventListener('submit', (event) => {
     }
 }, true);
 
-// Normalize decimal commas and hide the field's error
+// Keep decimal inputs to digits and dots, and hide the field's error
 document.addEventListener('input', (event) => {
     const input = event.target;
     if (!(input instanceof HTMLInputElement)) {
         return;
     }
 
-    if (input.matches('[data-decimal]') && input.value.includes(',')) {
-        input.value = input.value.replace(/,/g, '.');
+    if (input.matches('[data-decimal]')) {
+        const decimal = input.value.replace(/,/g, '.').replace(/[^0-9.]/g, '');
+
+        if (decimal !== input.value) {
+            input.value = decimal;
+        }
     }
 
     const field = input.closest('[data-field]');

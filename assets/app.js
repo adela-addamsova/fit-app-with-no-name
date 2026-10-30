@@ -1,0 +1,8 @@
+import './stimulus_bootstrap.js';
+import './js/weight-chart.js';
+import './js/dialog.js';
+import './js/sticky-header.js';
+import './js/sidebar-resize.js';
+import './js/theme.js';
+import './js/datepicker.js';
+import './js/form-validation.js';

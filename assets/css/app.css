@@ -864,6 +864,15 @@ html:has(.dialog[open]) {
   border-color: var(--danger);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 14%, transparent);
 }
+.field.reserve {
+  position: relative;
+  padding-bottom: 1.75rem;
+}
+.field.reserve > .error,
+.field.reserve > ul {
+  position: absolute;
+  bottom: 0;
+}
 
 .input {
   width: 100%;
@@ -892,6 +901,8 @@ html:has(.dialog[open]) {
 }
 
 .datepicker {
+  display: flex;
+  flex-direction: column;
   gap: 0.75rem;
 }
 .datepicker .calendar {

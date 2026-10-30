@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Weight{% endblock %}
+
+{% block body %}
+    {% set latest = entries|last %}
+    {% set previous = entries|length > 1 ? entries[entries|length - 2] : null %}
+
+    <header class="page-header flex justify-between" data-sticky-header>
+        <div>
+            <p class="date">{{ 'now'|date('l, j F') }}</p>
+            <h1>Weight</h1>
+        </div>
+        <twig:Button icon="add" data-dialog-open="add-weight">Add</twig:Button>
+    </header>
+
+    <section class="card hero">
+        <div class="top flex justify-between">
+            <p class="label flex"><span class="icon-chip"><twig:ux:icon name="weight"/></span>Current weight</p>
+            {% if entries|length > 1 %}
+                <div class="segmented" role="group" aria-label="Chart range">
+                    <button type="button" data-chart-range="30">1M</button>
+                    <button type="button" data-chart-range="90">3M</button>
+                    <button type="button" data-chart-range="365">1Y</button>
+                    <button type="button" data-chart-range="all" class="active">All</button>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="reading flex wrap">
+            {% if latest %}
+                <p class="value">{{ latest.weight|number_format(1, '.', ' ') }}<span class="unit">kg</span></p>
+            {% else %}
+                <p class="value">–</p>
+            {% endif %}
+            {% if previous %}
+                <twig:TrendPill :diff="latest.weight - previous.weight" :since="previous.measured_at"/>
+            {% endif %}
+        </div>
+        <p class="meta">{{ latest ? latest.measured_at|date('j F Y') : 'No entries yet' }}</p>
+
+        {% if entries|length > 1 %}
+            <div class="chart">
+                <canvas data-weight-chart data-points="{{ entries|map(e => {x: e.measured_at, y: e.weight})|json_encode }}"></canvas>
+            </div>
+        {% else %}
+            <div class="placeholder grid">Add at least two entries to see your trend</div>
+        {% endif %}
+    </section>
+
+    <section class="history">
+        <h2 class="section-title">History</h2>
+        {% for month, items in history %}
+            <h3 class="month">{{ month }}</h3>
+            <ul class="list">
+                {% for entry in items %}
+                    <li class="flex justify-between">
+                        <span class="date">{{ entry.measured_at|date('D, j M') }}</span>
+                        <span class="value">{{ entry.weight|number_format(1, '.', ' ') }} kg</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="muted">No entries yet.</p>
+        {% endfor %}
+    </section>
+
+    <dialog id="add-weight" class="dialog" {{ form.vars.submitted and not form.vars.valid ? 'data-open-on-load' }}>
+        <div class="body">
+            <div class="head flex justify-between">
+                <h2>Add weight</h2>
+                <button type="button" class="close" data-dialog-close aria-label="Close">
+                    <twig:ux:icon name="close"/>
+                </button>
+            </div>
+            {{ form_start(form, {attr: {class: 'stack', novalidate: 'novalidate', 'data-validate': ''}}) }}
+                {{ form_errors(form) }}
+                <div class="field reserve" data-field>
+                    {{ form_label(form.weight) }}
+                    {{ form_widget(form.weight, {attr: {
+                        class: 'input large',
+                        placeholder: '62.4',
+                        inputmode: 'decimal',
+                        autofocus: true,
+                        autocomplete: 'off',
+                        pattern: '[1-9][0-9]{0,2}([.][0-9]{1,2})?',
+                        'data-decimal': '',
+                        'data-error-required': 'Enter your weight.',
+                        'data-error-pattern': 'Enter a weight between 1 and 999.99 kg.',
+                    }}) }}
+                    {{ form_errors(form.weight) }}
+                </div>
+                <div class="field" data-field>
+                    <span class="label">Date</span>
+                    <div class="datepicker" data-datepicker>
+                        {{ form_widget(form.measuredAt, {type: 'hidden', attr: {'data-date-input': ''}}) }}
+                        <div class="calendar" role="group" aria-label="Date">
+                            <div class="head flex justify-between">
+                                <button type="button" class="arrow" data-date-nav="-1" aria-label="Previous month">
+                                    <twig:ux:icon name="previous"/>
+                                </button>
+                                <strong data-date-title></strong>
+                                <button type="button" class="arrow" data-date-nav="1" aria-label="Next month">
+                                    <twig:ux:icon name="next"/>
+                                </button>
+                            </div>
+                            <div class="weekdays grid" aria-hidden="true">
+                                <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+                            </div>
+                            <div class="days grid" data-date-grid></div>
+                        </div>
+                    </div>
+                    {{ form_errors(form.measuredAt) }}
+                </div>
+                <twig:Button type="submit" class="wide">Save</twig:Button>
+            {{ form_end(form) }}
+        </div>
+    </dialog>
+{% endblock %}

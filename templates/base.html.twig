@@ -4,27 +4,11 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>{% block title %}{% endblock %}{{ block('title') is not empty ? ' · ' }}{{ app_name }}</title>
+        <title>{% block title %}{% endblock %}{{ block('title') ? ' · ' }}{{ app_name }}</title>
 
         <link rel="icon" type="image/svg+xml" href="{{ asset('images/favicon.svg') }}">
 
-        {# Handle sidebar width #}
-        <script>
-            try {
-                const sidebarWidth = localStorage.getItem("sidebar-width");
-                if (sidebarWidth) {
-                    document.documentElement.style.setProperty(
-                        "--sidebar-width",
-                        sidebarWidth,
-                    );
-                }
-
-                const theme = localStorage.getItem("theme");
-                if (theme === "light" || theme === "dark") {
-                    document.documentElement.dataset.theme = theme;
-                }
-            } catch (error) {}
-        </script>
+        <script src="{{ asset('js/preferences.js') }}"></script>
         
         {% block stylesheets %}
             <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -35,7 +19,7 @@
         {% endblock %}
     </head>
     <body>
-        {% set current_route = app.request.attributes.get('_route') %}
+        {% set current_route = app.current_route %}
 
         {% set nav_items = [
             {
