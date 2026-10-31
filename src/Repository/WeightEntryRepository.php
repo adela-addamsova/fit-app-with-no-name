@@ -11,12 +11,14 @@ final class WeightEntryRepository
 {
     public function __construct(private readonly Connection $db) {}
 
-    public function add(string $weight, string $measuredAt): void
+    /** Saving a day again replaces its weight. */
+    public function save(string $weight, string $measuredAt): void
     {
-        $this->db->insert('weight_entry', [
-            'weight' => $weight,
-            'measured_at' => $measuredAt,
-        ]);
+        $this->db->executeStatement(
+            'INSERT INTO weight_entry (weight, measured_at) VALUES (:weight, :measuredAt)
+            ON DUPLICATE KEY UPDATE weight = VALUES(weight)',
+            ['weight' => $weight, 'measuredAt' => $measuredAt]
+        );
     }
 
     /** @return list<array{id: int, weight: string, measured_at: string}> */
@@ -31,7 +33,7 @@ final class WeightEntryRepository
     public function findLatest(int $limit): array
     {
         return $this->db->fetchAllAssociative(
-            'SELECT id, weight, measured_at FROM weight_entry ORDER BY measured_at DESC, id DESC LIMIT :limit',
+            'SELECT id, weight, measured_at FROM weight_entry ORDER BY measured_at DESC LIMIT :limit',
             ['limit' => $limit],
             ['limit' => ParameterType::INTEGER]
         );

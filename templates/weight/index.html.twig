@@ -83,10 +83,10 @@
                         inputmode: 'decimal',
                         autofocus: true,
                         autocomplete: 'off',
-                        pattern: '[1-9][0-9]{0,2}([.][0-9]{1,2})?',
+                        pattern: '[1-9][0-9]{0,2}([.][0-9])?',
                         'data-decimal': '',
                         'data-error-required': 'Enter your weight.',
-                        'data-error-pattern': 'Enter a weight between 1 and 999.99 kg.',
+                        'data-error-pattern': 'Enter a weight between 1 and 999.9 kg.',
                     }}) }}
                     {{ form_errors(form.weight) }}
                 </div>

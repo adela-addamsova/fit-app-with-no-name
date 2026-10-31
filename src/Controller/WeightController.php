@@ -23,8 +23,8 @@ final class WeightController extends AbstractController
             ->add('weight', NumberType::class, [
                 'label' => 'Weight (kg)',
                 'input' => 'string',
-                'scale' => 2,
-                'constraints' => [new Assert\NotBlank(), new Assert\Range(min: 1, max: 999.99, notInRangeMessage: 'Enter a weight between {{ min }} and {{ max }} kg.')],
+                'scale' => 1,
+                'constraints' => [new Assert\NotBlank(), new Assert\Range(min: 1, max: 999.9, notInRangeMessage: 'Enter a weight between {{ min }} and {{ max }} kg.')],
             ])
             ->add('measuredAt', DateType::class, [
                 'label' => 'Date',
@@ -38,7 +38,7 @@ final class WeightController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $weightEntries->add($data['weight'], $data['measuredAt']->format('Y-m-d'));
+            $weightEntries->save($data['weight'], $data['measuredAt']->format('Y-m-d'));
 
             return $this->redirectToRoute('app_weight_index');
         }
