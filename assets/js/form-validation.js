@@ -4,6 +4,8 @@
  * - data-field marks each field wrapper (label + input + errors)
  * - data-error-required / data-error-pattern on an input override the default messages
  * - data-decimal on an input turns a typed decimal comma into a dot and removes anything but digits and dots
+ *
+ * Closing a dialog empties its form, so it opens clean next time.
  */
 
 /**
@@ -83,6 +85,30 @@ document.addEventListener('submit', (event) => {
         event.preventDefault();
         event.stopImmediatePropagation();
         firstInvalid.focus();
+    }
+}, true);
+
+/**
+ * Empties the form's fields and removes all its errors.
+ *
+ * @param {HTMLFormElement} form
+ */
+const resetForm = (form) => {
+    form.querySelectorAll(':scope > ul').forEach((element) => element.remove());
+
+    form.querySelectorAll('[data-field]').forEach((field) => {
+        clearError(field);
+
+        const input = field.querySelector('input:not([type="hidden"]), textarea');
+        if (input) {
+            input.value = '';
+        }
+    });
+};
+
+document.addEventListener('close', (event) => {
+    if (event.target instanceof HTMLDialogElement) {
+        event.target.querySelectorAll('form[data-validate]').forEach(resetForm);
     }
 }, true);
 

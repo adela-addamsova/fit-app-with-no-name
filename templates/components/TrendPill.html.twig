@@ -1,7 +1,7 @@
 {# Weight change between two entries, e.g. "↓ 2.0 kg since 9 Oct". Usage: <twig:TrendPill :diff="diff" :since="previous.measured_at" /> #}
 {% props diff, since = null %}
 
-<span {{ attributes.defaults({class: 'pill'}) }}>
+<span {{ attributes.defaults({class: 'pill', 'data-trend': diff < 0 ? 'down' : (diff > 0 ? 'up' : 'same')}) }}>
     {%- if diff != 0 %}<twig:ux:icon :name="diff < 0 ? 'trend-down' : 'trend-up'" />{% endif %}
     {{ diff|abs|number_format(1, '.', ' ') }} kg
     {%- if since %} <span class="muted">since {{ since|date('j M') }}</span>{% endif %}
