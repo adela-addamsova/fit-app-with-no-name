@@ -51,18 +51,26 @@ const pointsInRange = (range) => {
 };
 
 /**
- * Places up to 5 ticks on real entry dates, evenly spread, which avoids repeated day labels.
+ * Places ticks on real entry dates, which avoids repeated day labels.
  *
- * @param {{chart: {data: {datasets: {data: ChartPoint[]}[]}}, ticks: {value: number}[]}} scale Chart.js x-axis
+ * @param {{chart: {width: number, data: {datasets: {data: ChartPoint[]}[]}}, ticks: {value: number}[]}} scale Chart.js x-axis
  */
 const entryDateTicks = (scale) => {
     const dates = scale.chart.data.datasets[0].data.map((point) => point.x);
-    const count = Math.min(5, dates.length);
+    const maxTicks = scale.chart.width < 400 ? 3 : 6;
+    const count = Math.min(maxTicks, dates.length);
+    const first = dates[0];
+    const last = dates[dates.length - 1];
     const ticks = [];
 
     for (let i = 0; i < count; i++) {
-        const index = Math.round((i * (dates.length - 1)) / Math.max(count - 1, 1));
-        ticks.push({ value: dates[index] });
+        const target = first + (i * (last - first)) / Math.max(count - 1, 1);
+        const nearest = dates.reduce((best, date) => (Math.abs(date - target) < Math.abs(best - target) ? date : best));
+
+        const alreadyAdded = ticks.some((tick) => tick.value === nearest);
+        if (!alreadyAdded) {
+            ticks.push({ value: nearest });
+        }
     }
 
     scale.ticks = ticks;
@@ -167,6 +175,8 @@ const renderWeightChart = () => {
             responsive: true,
             maintainAspectRatio: false,
             animation: reducedMotion.matches ? false : {},
+            // Chart.js pads both sides for the last point's dot, which leaves a gap on the left
+            layout: { autoPadding: false },
             interaction: { mode: 'nearest', axis: 'x', intersect: false },
             plugins: {
                 legend: { display: false },
@@ -197,6 +207,9 @@ const renderWeightChart = () => {
                     ticks: {
                         color: muted,
                         maxRotation: 0,
+                        // First label starts at the left edge, last ends at the right, so there is no gap
+                        align: 'inner',
+                        padding: 0,
                         callback: (value) => shortDate.format(value),
                     },
                 },

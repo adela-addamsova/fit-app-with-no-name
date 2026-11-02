@@ -15,7 +15,7 @@
     </header>
 
     <section class="card hero">
-        <div class="top flex justify-between">
+        <div class="top flex wrap justify-between">
             <p class="label flex"><span class="icon-chip"><twig:ux:icon name="weight"/></span>Current weight</p>
             {% if entries|length > 1 %}
                 <div class="segmented" role="group" aria-label="Chart range">
@@ -27,17 +27,19 @@
             {% endif %}
         </div>
 
-        <div class="reading flex wrap">
-            {% if latest %}
-                <p class="value">{{ latest.weight|number_format(1, '.', ' ') }}<span class="unit">kg</span></p>
-            {% else %}
-                <p class="value">–</p>
-            {% endif %}
-            {% if previous %}
-                <twig:TrendPill :diff="latest.weight - previous.weight" :since="previous.measured_at"/>
-            {% endif %}
+        <div>
+            <p class="meta">{{ latest ? latest.measured_at|date('j F Y') : 'No entries yet' }}</p>
+            <div class="reading flex wrap">
+                {% if latest %}
+                    <p class="value">{{ latest.weight|number_format(1, '.', ' ') }}<span class="unit">kg</span></p>
+                {% else %}
+                    <p class="value">–</p>
+                {% endif %}
+                {% if previous %}
+                    <twig:TrendPill :diff="latest.weight - previous.weight" :since="previous.measured_at"/>
+                {% endif %}
+            </div>
         </div>
-        <p class="meta">{{ latest ? latest.measured_at|date('j F Y') : 'No entries yet' }}</p>
 
         {% if entries|length > 1 %}
             <div class="chart">

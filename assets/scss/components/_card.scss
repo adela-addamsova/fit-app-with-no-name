@@ -7,6 +7,10 @@
     box-shadow: var(--shadow);
     @include border-radius;
 
+    @include mobile {
+        padding: $space-5 $space-4;
+    }
+
     .placeholder {
         place-items: center;
         height: 12rem;
@@ -80,8 +84,22 @@
         gap: $space-4;
         box-shadow: var(--shadow-raised);
 
+        @include mobile {
+            gap: $space-5;
+        }
+
         .top {
             gap: $space-3;
+        }
+
+        .segmented {
+            @include mobile {
+                width: 100%;
+
+                button {
+                    flex: 1;
+                }
+            }
         }
 
         .label {
@@ -102,6 +120,10 @@
             letter-spacing: -.045em;
             line-height: 1;
             font-variant-numeric: tabular-nums;
+
+            @include mobile {
+                font-size: 3rem;
+            }
         }
 
         .unit {
@@ -110,10 +132,14 @@
             font-weight: 500;
             letter-spacing: 0;
             color: var(--muted);
+
+            @include mobile {
+                font-size: $text-base;
+            }
         }
 
         .meta {
-            margin-top: -$space-2;
+            margin-bottom: $space-2;
             font-size: $text-sm;
             color: var(--muted);
         }
