@@ -64,8 +64,15 @@ $dialog-hidden: translateY(1.5rem) scale(.94);
         }
     }
 
+    .actions {
+        gap: $space-3;
+
+        > * {
+            flex: 1;
+        }
+    }
+
     .close {
-        display: grid;
         place-items: center;
         width: 2rem;
         height: 2rem;
@@ -77,6 +84,31 @@ $dialog-hidden: translateY(1.5rem) scale(.94);
         svg {
             width: 1rem;
             height: 1rem;
+        }
+    }
+
+    &.confirm {
+        width: min(100% - #{$space-6}, 24rem);
+
+        .body {
+            padding: $space-6 $space-5 $space-5;
+            text-align: center;
+        }
+
+        .close {
+            position: absolute;
+            top: $space-3;
+            right: $space-3;
+        }
+
+        h2 {
+            font-size: $text-lg;
+            font-weight: 700;
+            letter-spacing: -.02em;
+        }
+
+        .muted {
+            margin-top: $space-1;
         }
     }
 

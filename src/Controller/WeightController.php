@@ -19,7 +19,11 @@ final class WeightController extends AbstractController
     #[Route('', name: 'index')]
     public function index(Request $request, WeightEntryRepository $weightEntries): Response
     {
-        $form = $this->createFormBuilder(['measuredAt' => new \DateTimeImmutable('today')])
+        if ($request->isMethod('POST') && $request->request->has('delete_id')) {
+            return $this->delete($request, $weightEntries);
+        }
+
+        $form =$this->createFormBuilder(['measuredAt' => new \DateTimeImmutable('today')])
             ->add('weight', NumberType::class, [
                 'label' => 'Weight (kg)',
                 'input' => 'string',
@@ -50,6 +54,17 @@ final class WeightController extends AbstractController
             'entries' => $entries,
             'history' => $this->groupByMonth($entries),
         ]);
+    }
+
+    private function delete(Request $request, WeightEntryRepository $weightEntries): Response
+    {
+        if (!$this->isCsrfTokenValid('delete', $request->request->getString('_csrf_token'))) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
+        }
+
+        $weightEntries->delete($request->request->getInt('delete_id'));
+
+        return $this->redirectToRoute('app_weight_index');
     }
 
     /**

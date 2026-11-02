@@ -6,3 +6,4 @@ import './js/sidebar-resize.js';
 import './js/theme.js';
 import './js/datepicker.js';
 import './js/form-validation.js';
+import './js/delete-confirm.js';

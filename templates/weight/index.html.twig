@@ -54,9 +54,15 @@
             <h3 class="month">{{ month }}</h3>
             <ul class="list">
                 {% for entry in items %}
+                    {% set label = "Weight #{entry.weight|number_format(1, '.', ' ')} kg from #{entry.measured_at|date('j M')} " %}
                     <li class="flex justify-between">
                         <span class="date">{{ entry.measured_at|date('D, j M') }}</span>
-                        <span class="value">{{ entry.weight|number_format(1, '.', ' ') }} kg</span>
+                        <span class="end flex">
+                            <span class="value">{{ entry.weight|number_format(1, '.', ' ') }} kg</span>
+                            <button type="button" class="delete grid" data-dialog-open="delete-weight" data-delete-entry="{{ entry.id }}" data-delete-label="{{ label }}" aria-label="Delete {{ label }}">
+                                <twig:ux:icon name="delete"/>
+                            </button>
+                        </span>
                     </li>
                 {% endfor %}
             </ul>
@@ -69,7 +75,7 @@
         <div class="body">
             <div class="head flex justify-between">
                 <h2>Add weight</h2>
-                <button type="button" class="close" data-dialog-close aria-label="Close">
+                <button type="button" class="close grid" data-dialog-close aria-label="Close">
                     <twig:ux:icon name="close"/>
                 </button>
             </div>
@@ -116,4 +122,6 @@
             {{ form_end(form) }}
         </div>
     </dialog>
+
+    <twig:DeleteDialog type="weight"/>
 {% endblock %}

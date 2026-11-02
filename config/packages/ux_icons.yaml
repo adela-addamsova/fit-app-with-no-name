@@ -25,6 +25,7 @@ ux_icons:
         settings: 'lucide:settings'
         add: 'lucide:plus'
         close: 'lucide:x'
+        delete: 'lucide:trash-2'
         previous: 'lucide:chevron-left'
         next: 'lucide:chevron-right'
         trend-down: 'lucide:arrow-down'

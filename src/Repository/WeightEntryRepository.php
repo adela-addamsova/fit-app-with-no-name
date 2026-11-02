@@ -21,6 +21,11 @@ final class WeightEntryRepository
         );
     }
 
+    public function delete(int $id): void
+    {
+        $this->db->delete('weight_entry', ['id' => $id]);
+    }
+
     /** @return list<array{id: int, weight: string, measured_at: string}> */
     public function findAll(): array
     {

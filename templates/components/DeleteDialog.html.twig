@@ -1,0 +1,19 @@
+{# Confirms deleting an item and posts its id as delete_id to the current page. Usage: <twig:DeleteDialog type="type" /> #}
+{% props type, title = 'Delete entry?' %}
+
+<dialog {{ attributes.defaults({id: 'delete-' ~ type, class: 'dialog confirm'}) }}>
+    <div class="body relative">
+        <button type="button" class="close grid" data-dialog-close aria-label="Close">
+            <twig:ux:icon name="close"/>
+        </button>
+        <h2>{{ title }}</h2>
+        <p class="label mt10"><strong data-delete-label></strong></p>
+        <p class="muted">This can't be undone.</p>
+        <form method="post" class="actions flex mt20">
+            <input type="hidden" name="delete_id" data-delete-id>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete') }}" data-controller="csrf-protection">
+            <twig:Button class="secondary" data-dialog-close autofocus>Cancel</twig:Button>
+            <twig:Button type="submit" class="danger">Delete</twig:Button>
+        </form>
+    </div>
+</dialog>
