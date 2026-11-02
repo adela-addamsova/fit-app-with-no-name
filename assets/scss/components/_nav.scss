@@ -16,9 +16,9 @@
 
     .brand {
         display: flex;
-        align-items: center;
         gap: $space-3;
-        padding: 0 $space-3 $space-6;
+        padding-left: $space-3;
+        margin-bottom: $space-6;
 
         .mark {
             flex: none;
