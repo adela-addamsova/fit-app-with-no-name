@@ -13,6 +13,7 @@ Chart.register(...registerables);
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const systemDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const shortDate = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short' });
 const fullDate = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
@@ -165,6 +166,7 @@ const renderWeightChart = () => {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            animation: reducedMotion.matches ? false : {},
             interaction: { mode: 'nearest', axis: 'x', intersect: false },
             plugins: {
                 legend: { display: false },
