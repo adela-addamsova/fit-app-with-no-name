@@ -21,3 +21,6 @@
 ###< symfony/asset-mapper ###
 
 .vscode/
+
+/test-results/
+/playwright-report/
